@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Run Run</title>
+        <style>
+            
+            body{
+                margin: 0px;
+                overflow: hidden;
+            }
+            #fix{
+                color: black;
+                font-size: 92px;
+                font-family:'imapct';
+                cursor:pointer;
+
+                position: fixed;
+                top:250px;
+                right:400px;
+                border: 2px dashed black;
+                padding: 30px;
+                margin: auto;
+                z-index: 1700;
+                background: transparent;
+                text-shadow: 5px 2px 3px #333;
+                
+            }
+            #sprite, #blow, #weed,#runWeed{
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                display: none;
+                z-index: 1500;
+            }
+
+
+            .jump{
+                cursor:pointer;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: red;
+                position: fixed;
+                bottom: 50px;
+                left: calc(50% - 100px);
+                width: 200px;
+                margin: auto;
+                color: white;
+                font-size: 2rem;
+                height: 150px;
+            }
+        </style>
+    </head>
+    <body onkeydown="arrow(event)">       
+        <!-- <div id="yarab"></div> -->
+        <canvas id="im" width="1366" height="653" ></canvas>
+        <div onclick='game()'id="fix">Start Game</div>
+        <img id='sprite' src='run.png'>
+        <img id='blow' src='blow.png'>
+        <img id='weed' src='weed.png'>
+        <img id='runWeed' src='runWeedTransparent.png'>
+
+        <!-- <div class="jump" onclick="mesh3aref()">Jump</div> -->
+
+        <script>    
+            var c=document.getElementById("im");
+            var ctx=c.getContext("2d");
+            var ran=0;
+            c.width=window.innerWidth;
+            c.height=window.innerHeight;
+
+            var img=document.getElementById("sprite");
+            var img2=document.getElementById("blow");
+            var imgWeed=document.getElementById("weed");
+            var imgHigh=document.getElementById("runWeed");
+
+
+
+           
+            var xax=0,slow=0,yay=0,mov=0,xs=0,stop=0,score=0,oblivionFlag=0,oblivionCounter=0;
+
+
+            
+            function game(){
+                var runn=img;
+                score++;
+                document.getElementById("fix").style.display='none';
+                console.log("gamee");
+                if(oblivionFlag==1){
+                    runn=imgHigh;
+                oblivionCounter++;
+                console.log(oblivionCounter +'oblivioooooooooon');
+
+                    if(oblivionCounter<1100){
+                    weedColor=`hsl(${Math.random()*360},100%,40%)`;
+                    console.log(weedColor);
+                    ctx.fillStyle=`${weedColor}`;
+                    ctx.fillRect(0,0,c.width,c.height)
+                    }else{
+                        runn=img;
+                        oblivionFlag=0;
+                        oblivionCounter=0;
+                        weedColor='white';
+                    }
+                }else{}
+                
+                spriterun(weedColor,runn);
+                createBlocks()
+                createWeed();
+                checkBlow()
+                ctx.beginPath()
+                ctx.fillStyle='black'
+                ctx.fillRect(0,550,c.width,c.height)
+                if(stop==0){
+                window.requestAnimationFrame(game)
+                }else{
+                window.cancelAnimationFrame(game)
+                }
+            }
+
+            function showScore(){
+                console.log('scoreeee')
+                document.getElementById("fix").style.display='block';
+                document.getElementById("fix").innerHTML=`Your score is ${score}`;
+                window.cancelAnimationFrame(spriteblow);
+            }
+            var ratio=0,mouse=null;
+
+            function arrow(xs){
+                 xs = event.which || event.keyCode;
+                if(xs=='37'){
+                    img.setAttribute('src','run2.png')
+                    mov-=10;
+                }else if(xs=='39'){
+                    img.setAttribute('src','run.png')
+                    mov+=10;
+                }else if(xs==32){
+                    if (flag==0){
+                        ratio=1;
+                        inc=0;
+                        jump(); 
+                    }else{
+                        ratio=1.7;
+                    }
+                }else{}
+            }
+
+
+            function mesh3aref(){
+                if (flag==0){
+                        ratio=1;
+                        inc=0;
+                        jump(); 
+                    }else{
+                        ratio=1.7;
+                    }
+            }
+            var rndstart1=1300,rndstart2=1600;
+
+            var refresh=0,refreshWeed=0,weedColor='white';
+            
+            function spriterun(weedColor,runn){
+                console.log('sprite')
+                console.log(refreshWeed +'weeeeeeeed')
+
+                slow++;
+                refresh++;
+                refreshWeed++;
+
+                ctx.fillStyle=`${weedColor}`;
+                if(slow%4==0){
+                
+                    if(xax<=1280){
+                        ctx.beginPath();
+                    ctx.fillStyle="white";
+                    ctx.fillRect(0,0,c.width,c.height);
+                
+                        ctx.beginPath()
+                        ctx.drawImage(runn,-xax,300-sin)
+
+                        xax+=256;
+                        ctx.fillStyle='white';
+
+
+                    }else{
+                        xax=0
+                    }
+                }else{}
+                ctx.fillRect(256,256-sin,c.width,c.height);
+                ctx.fillRect(0,620-sin,c.width,c.height);
+                
+                if(refresh>300){
+                    trans=0;
+                    refresh=0;
+                    rndstart1=getRandomInt(1300,1600)
+                    rndstart2=getRandomInt(1300,1800)
+
+
+                }else{}
+                if(refreshWeed>600){
+                    refreshWeed=0;
+                    transWeed=0;
+                    rndstart3=getRandomInt(6000,9800);
+
+                }else{}
+            }
+             function getRandomInt(min, max) {
+                    min = Math.ceil(min);
+                    max = Math.floor(max);
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+
+                var slow2=3,xax2=0,yay2=0,finish=0;
+                function oblivion(){
+                    window.requestAnimationFrame(spriteblow);
+
+                }
+                function spriteblow(){
+                    // console.log("runniigg")
+                    window.requestAnimationFrame(spriteblow);
+                    if(slow2%3==0){
+                        if(xax2<=1256){
+                            ctx.drawImage(img2,-xax2,-yay2-190)
+                            xax2+=250;
+                            ctx.fillStyle='white';
+                            ctx.fillRect(250,0,c.width,c.height);
+                            ctx.fillRect(0,0,c.width,300);
+                            
+                        }else{
+                            yay2+=250
+                            xax2=0
+                            finish++;
+                            if(finish==3){
+                                stop=1;
+                                showScore();
+                                ctx.beginPath()
+                                ctx.clearRect(0,0,c.width,c.height)
+                                window.cancelAnimationFrame(spriteblow);
+                            }else{
+
+                            }
+                        }
+                    }else{
+                        
+                    }
+
+                    ctx.beginPath()
+                    ctx.fillStyle='black'
+                    ctx.fillRect(0,550,c.width,c.height)
+                    slow2++;
+
+                }
+
+            var trans=0;
+            function checkBlow(){
+                console.log('checking')
+                if((300-sin)>(270)){
+                    if(((rndstart1+trans<180)&&((rndstart1+trans>-40)))||((rndstart2+trans+200<180)&&((rndstart2+trans+200>-40)))){
+                        ctx.beginPath()
+                        ctx.clearRect(0,0,c.width,c.height)
+                        stop=1;
+                        spriteblow()
+                    }else{}
+                }else{}
+                if((300-sin)>(170)){
+                    if(((rndstart3+transWeed<180)&&((rndstart3+transWeed>-40)))){
+                        oblivionFlag=1;
+                    }else{}
+                }else{}
+            }
+
+            function createBlocks(){
+                console.log('blockss')
+                ctx.beginPath();
+                ctx.fillStyle='black';
+                ctx.fillRect(rndstart1+trans,480,130,70);
+                ctx.beginPath();
+                ctx.fillStyle='black';
+                ctx.fillRect(rndstart2+trans+200,480,100,70);
+                trans-=18;
+            }
+
+            var rndstart3=4000,transWeed=0;;
+
+            var troll=0;
+           function createWeed(){
+                troll+=.2;
+                ctx.drawImage(imgWeed,rndstart3+transWeed,350+(Math.sin(troll)*35),150,150);
+                transWeed-=18;
+
+
+            }
+
+            var inc=0,sin=0,flag=0;
+            function jump(){
+                sin=170*Math.sin(inc)*ratio;
+                console.log(sin)
+                if(sin+0.001>0){
+                    xax=768;
+                    flag=1;
+                    window.requestAnimationFrame(jump)
+                }else{
+                    flag=0;
+                    window.cancelAnimationFrame(jump)
+
+                }
+                inc+=((Math.PI)/(60))/ratio;
+            }
+
+       
+
+        </script>
+    </body>
+</html>
